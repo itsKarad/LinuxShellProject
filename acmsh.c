@@ -170,6 +170,9 @@ int sh_again(char** args){
 
 int sh_exit(char **args)
 {
+	change_blue();
+	printf("Goodbye now!");
+	reset_color();
 	return 0;
 }
 
@@ -405,7 +408,7 @@ int main(int argc,char **argv)
 	do{
 		
 		change_green();
-		printf("ACM-SH > ");
+		printf("MY_SHELL > ");
 		reset_color();
 		line=sh_read_line();
 		history[command_count] = (char *)malloc(sizeof(*line));
