@@ -5,6 +5,7 @@
 #include<sys/wait.h>
 #include<sys/types.h>
 #include<signal.h>
+#include<stdlib.h>
 #include"./linkedlist.h"
 
 
@@ -56,18 +57,43 @@ int (*builtin_func[]) (char**)={
 	&sh_about
 };
 
+// Color changing functions
+void change_red (){ 
+	printf("\e[1;31m"); 
+}
+void change_green (){ 
+	printf("\e[0;32m"); 
+}
+void change_blue(){
+	printf("\e[0;34m");
+}
+void change_yellow(){
+	printf("\e[1;33m");
+}
+void change_cyan (){ 
+	printf("\e[0;36m"); 
+}
+void reset_color_color (){ 
+	printf("\033[0m"); 
+}
+
+
 
 int sh_cd(char** args)
 {
 	if(args[1]==NULL)
 	{
-		fprintf(stderr,"sh: expected argument to \"cd\"\n");
+		change_red();
+		printf("sh: expected argument to \"cd\"\n");
+		reset_color();
 	}
 	else
 	{
 		if(chdir(args[1])!=0)
 		{
-			perror("Invalid Call");
+			change_red();
+			printf("Invalid Call, no such directory!\n");
+			reset_color();
 		}
 	}
 	return 1;
@@ -81,13 +107,18 @@ int sh_pwd(){
     return 1;
 }
 int sh_about(){
+	change_cyan();
     printf("╔═══════════════╗\n");
     printf("Made by Aditya Karad\n");
     printf("╚═══════════════╝\n");
+	reset_color();
     return 1;
 }
 int sh_history(char** args){
+	change_green();
     printf("Your history:\n");
+	reset_color();
+	change_yellow();
     int i;
     if (args[1] == NULL) {
 		i=0;
@@ -98,33 +129,42 @@ int sh_history(char** args){
 		if(i<0)
             i=0;
 	}
+	change_yellow();
 	for(int j = i; j < command_count; j++)
 		printf("%d:%s\n", j+1, history[j]);
+	reset_color();
 	return 1;
 }
 int sh_again(char** args){
 	if(args[1]==NULL){
-		perror("Err : expected arguement to again command\n");
+		change_red();
+		printf("Err : expected arguement to again command\n");
+		reset_color();
 		return 1;
 	}
 	else{
 		int idx=atoi(args[1]);
 		idx++;
 		if(idx<=0 || idx>command_count){
+			change_red();
 			printf("Invalid argument\n");
+			reset_color();
 			return 1;
 		}
 		idx--;
 		printf("%s\n",history[command_count-idx]);
 		char **args1 = sh_split_line(history[command_count-idx]);
 		if(strcmp(args1[0],"again")==0){
+			change_red();
 			printf("Cannot execute command again, again!\n");
+			reset_color();
 			return 1;
 		}
 		int status = sh_execute(args1);
 		free(args1);
 		return status;		
 	}
+	reset_color();
 	return 1;
 }
 
@@ -147,7 +187,9 @@ int sh_bg(char **args)
         {
             if (execvp(firstCmd,args)<0)
             {
-                perror("Error on execvp\n");
+                change_red();
+				printf("Error on execvp\n");
+				reset_color();
                 exit(0);
             }
 
@@ -163,7 +205,9 @@ int sh_bg(char **args)
         }
     }
     else{
-        perror("fork() error");
+        change_red();
+		printf("fork() error\n");
+		reset_color();
     }
     return 1;
 }
@@ -174,11 +218,12 @@ int sh_bglist(char **args)
 }
 int sh_kill(char **args)
 {
-    // kill 1575
     char* pidCmd=args[1];
     if(!pidCmd)//kill 
     {
-        printf("Please specify a pid\n");
+        change_red();
+		printf("Please specify a pid\n");
+		reset_color();
     }
     else
     {
@@ -191,12 +236,16 @@ int sh_kill(char **args)
                 delete_from_list(pid);
             }
             else{
-                perror("Could not kill pid specified\n");
+                change_red();
+				printf("Could not kill pid specified\n");
+				reset_color();
             }
         }
         else{
+			change_red();
             printf("Specify a pid which is present in the list.\nType \"bglist\" to see active processes\n");
-        }
+			reset_color();
+		}
     }
     return 1;
 }
@@ -208,11 +257,13 @@ int find_size(){
     return len;
 }
 int sh_help(){
+	change_blue();
     printf("\nWelcome to ACM Shell, you can use the following commands:\n");
     int n=find_size();
     for(int i=0;i<n;i++){
         printf("%s\n" ,builtin_str[i]);
     }
+	reset_color();
     return 1;// successful
 }
 
@@ -227,7 +278,9 @@ char *sh_read_line()
 			exit(EXIT_SUCCESS);
 		else
 		{
-			perror("acm-sh: getline\n");
+			change_red();
+			printf("acm-sh: getline\n");
+			reset_color();
 			exit(EXIT_FAILURE);
 		}
 	}
@@ -245,7 +298,9 @@ char** sh_split_line(char* line)
 
 	if(!token)
 	{
-		fprintf(stderr,"acm-sh: allocation error\n");
+		change_red();
+		printf("acm-sh: allocation error\n");
+		reset_color();
 		exit(EXIT_FAILURE);
 	}
 
@@ -272,13 +327,17 @@ int sh_launch(char **args)
 	{
 		if(execvp(args[0],args)==-1)
 		{
+			change_red();
 			printf("Invalid Command\n");
+			reset_color();
 		}
 		exit(EXIT_FAILURE);
 	}
 	else if(pid<0)
 	{
-		perror("acm-sh");
+		change_red();
+		perror("Forking error");
+		reset_color();
 	}
 	else
 	{
@@ -345,7 +404,9 @@ int main(int argc,char **argv)
     signal(SIGCHLD,signalHandler);
 	do{
 		
+		change_green();
 		printf("ACM-SH > ");
+		reset_color();
 		line=sh_read_line();
 		history[command_count] = (char *)malloc(sizeof(*line));
 		strcpy(history[command_count], line);
