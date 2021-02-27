@@ -17,6 +17,7 @@ int sh_pwd();
 int sh_about();
 int sh_history(char** args);
 int sh_again(char** args);
+int sh_google(char ** args);
 int sh_exit(char **args);
 int sh_bg(char **args);
 int sh_bglist(char **args);
@@ -41,6 +42,7 @@ char* builtin_str[]={
 	"pwd",
 	"history",
 	"again",
+	"google",
 	"help",
 	"about"
 };
@@ -53,6 +55,7 @@ int (*builtin_func[]) (char**)={
 	&sh_pwd,
 	&sh_history,
 	&sh_again,
+	&sh_google,
 	&sh_help,
 	&sh_about
 };
@@ -73,7 +76,7 @@ void change_yellow(){
 void change_cyan (){ 
 	printf("\e[0;36m"); 
 }
-void reset_color_color (){ 
+void reset_color (){ 
 	printf("\033[0m"); 
 }
 
@@ -167,11 +170,41 @@ int sh_again(char** args){
 	reset_color();
 	return 1;
 }
+int sh_google(char ** args){
 
+	if(args[1]==NULL)
+	{
+		char line1[]="xdg-open https://www.google.com";
+		char **args1=sh_split_line(line1);
+		return sh_launch(args1);
+	}
+	else
+	{
+		// since Google only allows 32 words anyways
+		char command[1000]="xdg-open https://www.google.com/search?q=";
+		// append 
+		char* search_query=args[1];
+		char* seperator="+";
+		int i=2;
+		for(;;i++){
+			if(args[i]==NULL){
+				break;
+			}
+			else{
+				strcat(search_query,seperator);
+				strcat(search_query,args[i]);
+			}
+		}		
+		strcat(command,search_query);
+		char **args1=sh_split_line(command);
+		return sh_launch(args1);
+	}
+	return 1;
+}
 int sh_exit(char **args)
 {
 	change_blue();
-	printf("Goodbye now!");
+	printf("Goodbye now!\n");
 	reset_color();
 	return 0;
 }
