@@ -45,7 +45,3 @@
 - Adding more custom features to execute custom routines and automation.
 
 # Working Demo
-
-![C%20Shell%20in%20Linux%20Readme%20file%209850e89b29f84f20966e3784d0bbfd59/demo(1).gif](C%20Shell%20in%20Linux%20Readme%20file%209850e89b29f84f20966e3784d0bbfd59/demo(1).gif)
-
-[C%20Shell%20in%20Linux%20Readme%20file%209850e89b29f84f20966e3784d0bbfd59/demo.mp4](C%20Shell%20in%20Linux%20Readme%20file%209850e89b29f84f20966e3784d0bbfd59/demo.mp4)
