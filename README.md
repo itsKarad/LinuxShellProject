@@ -20,7 +20,7 @@
 
 - Providing a few built-in functions, and seeing whether the command entered by user matches them. If yes, we call our custom function, or we call our `sh_launch()` function.
 - Important concepts in C such as `fork()` ,`exec()` and concepts of processes and their ID's.
-- 
+
 # Results obtained
 
 - A fully working shell, which executes the normal functions of the default terminal, but also a few more custom functions so that the power user can use it to his ability.
