@@ -45,3 +45,4 @@
 - Adding more custom features to execute custom routines and automation.
 
 # Working Demo
+![Working demo of this project](demo.gif) / ![](demo.gif)
