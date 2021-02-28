@@ -1,6 +1,6 @@
 # LinuxShellProject
 
-- This project consists for a basic iteration of C Shell, made in C language. This project has some exclusive custom commands, as well as the others which bash features.
+- This project consists for a basic iteration of Shell, made in C language. This project has some exclusive custom commands, as well as the others which bash features.
 
 ## How to Use?
 
