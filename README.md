@@ -1,9 +1,4 @@
 # LinuxShellProject
-# C Shell in Linux Readme file
-
-Created: Feb 27, 2021 11:06 PM
-
-# C Shell for Linux
 
 - This project consists for a basic iteration of C Shell, made in C language. This project has some exclusive custom commands, as well as the others which bash features.
 
