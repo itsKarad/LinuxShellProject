@@ -49,4 +49,5 @@
 
 ## Working Demo
 - Various features, including error handling is demonstated in the GIF below.
+
 ![Working demo of this project](demo.gif)
